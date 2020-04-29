@@ -3,6 +3,22 @@
 #include "pdp11.h"
 #include <assert.h>
 #include <string.h>
+#include <stdarg.h>
+
+int trc = 0;
+
+void trace (int trc, const char * fmt, ...) {
+	
+	if (trc == 1)
+		return;
+
+	if (trc == 0) {
+		va_list ap;
+		va_start(ap, fmt);
+		vprintf(fmt, ap);
+		va_end(ap);
+	}
+}
 
 void test_wr() {
 	
@@ -69,19 +85,35 @@ int main (int argc, char * argv[]) {
 	mem[ostat] = -1;
 	
 	if (argc == 1) {							// проверка существования argv[1] 
-		printf ("USAGE: %s sum\n", argv[0]);
+		printf ("USAGE: %s FileName\n\tIf you want to turn on trace: %s -t FileName\n", argv[0], argv[0]);
 		exit(1);
 	}
 	
-	char str[] = "-t";
-	
-	for (int i = 0; i < 1; i ++) {
+	if (argc == 2) {
 		
-		if (strcmp(str, argv[1]) == 0)
-			trc = 1;
+		trc = 0;
+		load_file(argv[1]);
+	}
+		
+	if (argc == 3) {
+		
+		trc = 1;
+		char str[] = "-t";
+	
+		for (int i = 0; i < 1; i ++) {
+		
+			if (strcmp(str, argv[1]) == 0) {
+				
+				trc = 1;
+				load_file(argv[2]);
+			}
+			
+			else 
+				load_file(argv[1]);
+		}
 	}
 	
-	load_file(argv[2]);
+	
 	run();
 	
 	
