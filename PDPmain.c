@@ -108,8 +108,10 @@ int main (int argc, char * argv[]) {
 				load_file(argv[2]);
 			}
 			
-			else 
-				load_file(argv[1]);
+			if (strcmp(str, argv[1]) != 0) {
+				printf ("\nNo such argument\n");
+				exit(1);
+			}
 		}
 	}
 	
