@@ -3,7 +3,6 @@
 #include "pdp11.h"
 #include <stdarg.h>
 
-int trc = TRACE;
 
 int N, Z, C;
 int r1, r2;
@@ -15,16 +14,6 @@ byte mem[MEMSIZE];
 word reg[8];
 int bit;
 
-void trace (int x, const char * fmt, ...) {
-	
-	if (x == trc)
-		return;
-	
-	va_list ap;
-	va_start(ap, fmt);
-	vprintf(fmt, ap);
-	va_end(ap);
-}
 
 void load_file(const char * sum) {
 	
