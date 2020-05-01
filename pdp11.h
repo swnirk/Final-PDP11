@@ -53,8 +53,10 @@ void load_file();
 void run();
 void NZVC(word w);
 void trace(int x, const char * fmt, ...);
+void trace_reg (int trc_r, const char * fmt, ...);
 void print_reg();
 void mem_dump(Adress A, word N);
+void usage(char * prog);
 
 
 
@@ -72,7 +74,7 @@ void do_tst();
 void do_jsr();
 void do_rts();
 
-extern int trc;
+extern int trc, trc_r;
 extern int N, Z, C;
 extern int bit, n, XX;
 extern int r1, r2;
