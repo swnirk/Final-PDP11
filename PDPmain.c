@@ -6,13 +6,27 @@
 #include <stdarg.h>
 
 int trc = 0;
+int trc_r = 0;
 
 void trace (int trc, const char * fmt, ...) {
 	
-	if (trc == 1)
+	if (trc == 0)
 		return;
 
-	if (trc == 0) {
+	if (trc == 1) {
+		va_list ap;
+		va_start(ap, fmt);
+		vprintf(fmt, ap);
+		va_end(ap);
+	}
+}
+
+void trace_reg (int trc_r, const char * fmt, ...) {
+	
+	if (trc_r == 0)
+		return;
+
+	if (trc_r == 1) {
 		va_list ap;
 		va_start(ap, fmt);
 		vprintf(fmt, ap);
@@ -67,57 +81,39 @@ void test_wr() {
 	assert(res == wor);
 
 }
+	
 
-/*void test_do() {
-	
-	struct SSDD ss, dd;
-	
-	ss.adr = 6;
-	ss.val = 0x0c;
-	dd.adr = 9;
-	dd.val = 0x0f;
-	do_mov();
-	do_add();
-}*/
-	
+void usage(char * prog) {
+    printf("USAGE: %s [-t] / [-T] FILE\n", prog);
+    printf("FILE\t - s-record file\n");
+    printf("-t\t - turn off tracing (turn on by default)\n");
+    printf("-T\t - turn off enlarged tracing (turn on by default)\n");
+}
 int main (int argc, char * argv[]) {
 	
-	mem[ostat] = -1;
 	
-	if (argc == 1) {							// проверка существования argv[1] 
-		printf ("USAGE: %s FileName\n\tIf you want to turn on trace: %s -t FileName\n", argv[0], argv[0]);
+	if (argc == 1) {
+        usage(argv[0]);
 		exit(1);
 	}
 	
-	if (argc == 2) {
+	for (int i = 1; i < argc-1; i++) {
 		
-		trc = 0;
-		load_file(argv[1]);
-	}
-		
-	if (argc == 3) {
-		
-		trc = 1;
-		char str[] = "-t";
-	
-		for (int i = 0; i < 1; i ++) {
-		
-			if (strcmp(str, argv[1]) == 0) {
-				
-				trc = 1;
-				load_file(argv[2]);
-			}
-			
-			if (strcmp(str, argv[1]) != 0) {
-				printf ("\nNo such argument\n");
-				exit(1);
-			}
+		if (0 == strcmp(argv[i], "-t"))
+			trc = 1;
+		else if (0 == strcmp(argv[i], "-T")) {
+			trc_r = 1;
+			trc = 1;
+		}
+		else {
+			printf("Unknown option %s\n", argv[i]);
+			usage(argv[0]);
+			exit(1);
 		}
 	}
-	
-	
+    // load program and run it
+	load_file(argv[argc-1]);
 	run();
-	
 	
 	return 0;
 }
