@@ -86,8 +86,8 @@ void test_wr() {
 void usage(char * prog) {
     printf("USAGE: %s [-t] / [-T] FILE\n", prog);
     printf("FILE\t - s-record file\n");
-    printf("-t\t - turn off tracing (turn on by default)\n");
-    printf("-T\t - turn off enlarged tracing (turn on by default)\n");
+    printf("-t\t - turn on tracing (turn off by default)\n");
+    printf("-T\t - turn on enlarged tracing (turn off by default)\n");
 }
 int main (int argc, char * argv[]) {
 	
