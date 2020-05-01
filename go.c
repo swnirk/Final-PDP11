@@ -57,18 +57,18 @@ void mem_dump(Adress A, word N) {
 
 void print_reg()
 {
-	trace (trc, "\n");
+	trace_reg (trc, "\n");
 	
 	int i;
 	for (i = 0; i < 8; i += 2)
-		trace (trc,"R%d = %06o   ", i, reg[i]);
+		trace_reg (trc_r,"R%d = %06o   ", i, reg[i]);
 		
-	printf("\n");
+	trace_reg(trc_r, "\n");
 	
 	for (i = 1; i < 8; i += 2)
-		trace (trc, "R%d = %06o    ", i, reg[i]);
+		trace_reg (trc_r, "R%d = %06o    ", i, reg[i]);
 		
-	trace (trc, "\n\n");
+	trace_reg (trc_r, "\n\n");
 
 }
 
@@ -98,9 +98,9 @@ void NZVC (word w) {
 	C = (bit ? (w >> 16) : (w >> 8)) & 1;
     
 	if (N == 1) 
-		trace (trc, "N");
+		trace (trc, " N");
 	if (N != 1) 
-		trace (trc, "-");
+		trace (trc, " -");
 	if (C == 1)
 		trace (trc, "C");
 	if (C != 1)
@@ -237,14 +237,14 @@ struct SSDD get_mode_reg(word w, int b) {
 
 void run() {
 	
-	trace (trc, "\n-------------running-------------\n");
+	trace (trc, "\n-------------running-------------\n\n");
 	
 	pc = 01000;
 	w_write(ostat, 0xFF);
 	while (1) {
 		
 		word w = w_read(pc);
-		trace (trc, "%06o : %06o \n", pc, w);			//отладочная печать
+		trace (trc, "%06o : %06o ", pc, w);			//отладочная печать
 		//trace ("%06o : ", pc);						//обычная печать
 		pc += 2;
 		int i;
@@ -272,14 +272,14 @@ void run() {
 				if (cmmd.param & HAS_SS) {
 					
 					ss = get_mode_reg (w >> 6, w >> 15);
-					trace (trc, "\n ss = %o, %o\n", ss.val, ss.adr);
+					//trace (trc, "\n ss = %o, %o\n", ss.val, ss.adr);
 				}
 					
 
 				if (cmmd.param & HAS_DD) {
 					
 					dd = get_mode_reg(w, w >> 15);
-					trace (trc, "\n dd = %o, %o\n", dd.val, dd.adr);
+					//trace (trc, "\n dd = %o, %o\n", dd.val, dd.adr);
 				}
 				
 				if (cmmd.param & HAS_NN) {

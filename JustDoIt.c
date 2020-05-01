@@ -12,7 +12,17 @@ struct SSDD dd;
 void do_halt() {
 	
 	trace (trc,"\n\n-------------THE END!!!-------------\n\n");
-	print_reg();
+	int i;
+	for (i = 0; i < 8; i += 2)
+		trace (trc,"R%d = %06o   ", i, reg[i]);
+		
+	trace(trc, "\n");
+	
+	for (i = 1; i < 8; i += 2)
+		trace (trc, "R%d = %06o    ", i, reg[i]);
+		
+	trace (trc, "\n\n");
+
 	exit(0);
 }
 
@@ -30,8 +40,8 @@ void do_bmov() {
 	b_write(dd.adr, (byte)dd.res);
 
 	//fprintf(stderr, "Wanna print to dd.adr=%o?\n", dd.adr);		//отладочная печать
-	if (dd.adr == odata)
-		fprintf(stderr, "%c %d\n", ss.val, ss.val);
+	//if (dd.adr == odata)
+		//fprintf(stderr, "%c %d\n", ss.val, ss.val);
 		
 	NZVC(dd.res);
 }
